@@ -18,6 +18,11 @@
 - Measure before/after when applying memoization techniques
 - Use `useSelector` hooks over `connect` for simpler usage
 
+### Recommended Tools
+- React DevTools Profiler
+- Flipper
+- why-did-you-render
+
 ### MUST NOT
 - Optimize prematurely (wait for dropped frames or performance symptoms)
 - Use React Context for global state without proper memoization
@@ -101,7 +106,7 @@
 - Memoization reduces work but increases memory pressure
 
 ### New Architecture Considerations
-- Fabric (new renderer) improves performance but same principles apply
+- Fabric reduces some rendering overhead, but does not eliminate JS thread bottlenecks or poor state management
 - State management patterns remain valid regardless of architecture
 
 ## Atomic State Pattern
