@@ -3,7 +3,7 @@
 ## Core Performance Principles
 
 - React Native owns the rendering lifecycle; you control component composition, not when/how repaints occur
-- Components re-render when parent re-renders OR props change (even if props didn't actually change—acceptable tradeoff to avoid prop comparison overhead)
+- Components may re-render when parent re-renders even if props are referentially equal (React prioritizes speed over deep equality checks)
 - Performance problems manifest as UI flicker and FPS drops, especially on low-end devices
 - Optimization must be data-driven: measure first, optimize second
 - Premature optimization can increase memory usage and provide marginal benefit
