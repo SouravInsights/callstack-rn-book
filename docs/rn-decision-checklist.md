@@ -22,3 +22,18 @@
 - Does function identity matter for child memoization?
 - If none of the above: don't memoize yet
 
+## List Implementation Decision
+- Are we rendering a scrollable list of items?
+  - **Yes**: Use FlatList or FlashList (never ScrollView + map)
+- Do we need 60FPS guarantee or have complex/dynamic-height items?
+  - **Yes**: Use FlashList (requires `estimatedItemSize`)
+  - **No**: Use FlatList
+- Are list item heights constant?
+  - **Yes**: Provide `getItemHeight()` or `overrideItemLayout` to avoid measurement
+- Are `keyExtractor` and `renderItem` stable callbacks? (use `useCallback` with empty deps)
+
+## Library Selection Decision
+- Have we checked bundle size impact? (use Bundlephobia or react-native-bundle-visualizer)
+- Can we import specific functions instead of entire library? (e.g., `lodash/map` not `lodash`)
+- Is there a smaller alternative? (e.g., dayjs vs moment.js)
+
