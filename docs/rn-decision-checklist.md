@@ -5,6 +5,11 @@
 - Are we seeing actual performance symptoms (dropped frames, UI flicker, FPS drops)?
 - Have we measured before/after when applying memoization techniques?
 
+## Before Profiling
+- Are we profiling in production mode (not dev/debuggable)?
+- Are we profiling on affected devices (lower-end or most common)?
+- Are we combining JS and native profiling for complete picture?
+
 ## TextInput Decision
 - Do we need to validate, mask, or modify user input as they type?
   - **Yes**: Use controlled `TextInput` (`value` prop)
@@ -36,4 +41,18 @@
 - Have we checked bundle size impact? (use Bundlephobia or react-native-bundle-visualizer)
 - Can we import specific functions instead of entire library? (e.g., `lodash/map` not `lodash`)
 - Is there a smaller alternative? (e.g., dayjs vs moment.js)
+
+## Profiling Strategy Decision
+- JS bottleneck → React Profiler, react-native-performance, Flipper Hermes Debugger
+- Native bottleneck → Xcode Instruments (iOS), Android Profiler (Android)
+- Layout issues → View Hierarchy (iOS), Layout Inspector (Android)
+- Regression prevention → Reassure in CI, real-time monitoring in production
+
+## iOS Profiling Decision
+- Are we detecting prewarming before measuring startup time?
+- Are we combining Time Profiler with Hermes Debugger for JS context?
+
+## Android Profiling Decision
+- Are we using System Tracing for thread-level analysis?
+- Are we checking mqt_js thread saturation?
 

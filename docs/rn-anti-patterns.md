@@ -15,6 +15,13 @@
 - Optimizing prematurely without dropped frames or performance symptoms, or measuring performance in dev mode instead of release mode
 - Applying optimizations without measuring before/after impact
 
+## Profiling Practices
+- Profiling in debuggable mode (Android timing data deviates significantly)
+- Not detecting prewarming before measuring startup time (iOS 15+ distorts metrics)
+- Using only Time Profiler without JS context (can't identify JS bottlenecks)
+- Profiling on high-end device only (missing issues on lower-end devices)
+- Not using System Tracing (can't identify which thread is bottleneck)
+
 ## List Patterns
 - Using `ScrollView + View.map()` for lists (renders all items, no virtualization, memory grows linearly)
 - Missing `estimatedItemSize` for FlashList (causes layout thrashing, blank spaces)
