@@ -41,6 +41,12 @@
 - Have we checked bundle size impact? (use Bundlephobia or react-native-bundle-visualizer)
 - Can we import specific functions instead of entire library? (e.g., `lodash/map` not `lodash`)
 - Is there a smaller alternative? (e.g., dayjs vs moment.js)
+- Does this library depend heavily on networking, render advanced graphics, or require native-level performance?
+  - **Yes**: Use mobile-specific SDK (e.g., `@react-native-firebase/*` not `firebase/database`)
+- Is battery consumption a concern for this feature?
+  - **Yes**: Prefer mobile SDK over web library (web libraries cause extraneous CPU/memory consumption)
+- Is this a straightforward, low-resource feature where code reusability outweighs performance?
+  - **Yes**: Web library acceptable (but still check bundle size)
 
 ## Profiling Strategy Decision
 - JS bottleneck → React Profiler, react-native-performance, Flipper Hermes Debugger

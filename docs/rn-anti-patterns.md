@@ -31,7 +31,12 @@
 - Adding items to beginning of array with `.concat()` or spread (causes full list re-render)
 
 ## Library Selection
-- Choosing libraries by GitHub stars alone (ignores bundle size, dependencies, feature bloat)
+- Choosing libraries by GitHub stars alone (ignores bundle size, dependencies, feature bloat, web vs mobile compatibility)
 - Not checking bundle impact before adding dependencies (large libraries directly increase TTI)
 - Importing entire utility libraries like `lodash` (Metro doesn't tree-shake, pulls unused code)
+- Using web libraries for networking-heavy features (e.g., real-time messaging) instead of mobile-specific SDKs
+- Using web libraries for advanced graphics rendering (3D structures, diagrams) instead of native solutions
+- Using web Firebase SDK (`firebase/database`) instead of `@react-native-firebase/database` (web SDK causes extraneous CPU/memory consumption)
+- Assuming web library API compatibility implies performance parity on mobile
+- Ignoring OS resource monitoring and throttling behavior (iOS throttles background activities based on resource consumption)
 

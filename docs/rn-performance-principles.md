@@ -21,4 +21,7 @@
 - Profiling must account for measurement variation (same device, different runs differ)
 - MUST detect prewarming before measuring startup time (iOS 15+ ProcessInfo environment variable)
 - MUST use System Tracing for thread-level analysis (Android); mqt_js thread saturation indicates JS thread bottleneck
+- Consider battery consumption impact in library selection (web libraries cause extraneous CPU/memory consumption; battery drain affects both foreground and background execution)
+- OS (iOS) continuously monitors resource consumption and may throttle background activities; background activity intervals can be reduced by OS if resource usage is excessive
+- Mobile SDKs deliver performance equivalent to native applications; web libraries assume browser capabilities and constraints, leading to suboptimal mobile performance
 
