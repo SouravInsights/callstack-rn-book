@@ -11,6 +11,7 @@
 - Use `useSelector` hooks over `connect` for simpler usage patterns
 - Premature optimization can increase memory usage without measurable benefit
 - Bundle size directly impacts TTI: All imported code is loaded, parsed, and executed; Metro doesn't tree-shake
+- File size (including bundled assets like animations) directly impacts user retention; 18.7% of app uninstalls are due to storage issues
 - Layout measurement is the bottleneck: Measuring layout dominates list rendering cost
 - Virtualization is mandatory for large lists: FlatList/FlashList only render visible items + buffer
 - MUST prioritize based on user paths and business impact
@@ -40,6 +41,7 @@
 - Reanimated worklets run JavaScript synchronously on UI thread (supports layout properties)
 - Gesture Handler processes gestures natively, avoiding JS thread entirely
 - JS-driven animations cannot achieve consistent 60FPS; prefer native solutions (NativeDriver/Reanimated/Gesture Handler)
+- Animation libraries must maintain 60 FPS on both JS and UI threads (measure FPS independently on each thread)
 - Native modules must be thin wrappers; heavy abstractions belong on JS side
 - Validation and type checking must occur before bridge calls to avoid unnecessary round-trips
 

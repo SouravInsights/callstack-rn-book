@@ -47,12 +47,14 @@
   - **Yes**: Prefer mobile SDK over web library (web libraries cause extraneous CPU/memory consumption)
 - Is this a straightforward, low-resource feature where code reusability outweighs performance?
   - **Yes**: Web library acceptable (but still check bundle size)
+- For animation libraries: FPS > file size > memory (Graphics memory acceptable if 60 FPS target met)
 
 ## Profiling Strategy Decision
 - JS bottleneck → React Profiler, react-native-performance, Flipper Hermes Debugger
 - Native bottleneck → Xcode Instruments (iOS), Android Profiler (Android)
 - Layout issues → View Hierarchy (iOS), Layout Inspector (Android)
 - Regression prevention → Reassure in CI, real-time monitoring in production
+- Memory profiling → Measure Java, Native, and Graphics segments (Graphics memory reflects UI thread rendering buffers)
 
 ## iOS Profiling Decision
 - Are we detecting prewarming before measuring startup time?
@@ -70,6 +72,9 @@
   - **Yes**: Use Gesture Handler + Reanimated
   - **No**: NativeDriver (transform/opacity) or Reanimated (layout properties) sufficient
 - Are we deferring heavy UI work during animations using `InteractionManager`?
+- Are we measuring FPS on both JS and UI threads independently? (use React Native Perf monitor)
+- Are we profiling animations in release mode? (DEV mode performance is misleading)
+- Are we measuring dropped frames and stutters? (4+ dropped frames indicates UI thread issues)
 
 ## Native Module Design Decision
 - Are we validating all arguments on JS side before native module calls?

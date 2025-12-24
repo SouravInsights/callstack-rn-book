@@ -13,6 +13,7 @@
 
 ## Optimization Practices
 - Optimizing prematurely without dropped frames or performance symptoms, or measuring performance in dev mode instead of release mode
+- Ignoring stutter threshold (4+ dropped frames indicates UI thread issues; measure dropped frames and stutters separately)
 - Applying optimizations without measuring before/after impact
 
 ## Profiling Practices
@@ -21,6 +22,8 @@
 - Using only Time Profiler without JS context (can't identify JS bottlenecks)
 - Profiling on high-end device only (missing issues on lower-end devices)
 - Not using System Tracing (can't identify which thread is bottleneck)
+- Profiling animations in DEV mode (DEV mode performance is misleading; disable DEV mode for animation benchmarking)
+- Measuring memory without Graphics segment (Java, Native, Graphics segments all contribute to total memory; Graphics memory reflects UI thread rendering buffers)
 
 ## List Patterns
 - Using `ScrollView + View.map()` for lists (renders all items, no virtualization, memory grows linearly)
