@@ -40,8 +40,10 @@
 - NativeDriver serializes animation once upfront; no bridge traffic during execution (limited to transform/opacity)
 - Reanimated worklets run JavaScript synchronously on UI thread (supports layout properties)
 - Gesture Handler processes gestures natively, avoiding JS thread entirely
-- JS-driven animations cannot achieve consistent 60FPS; prefer native solutions (NativeDriver/Reanimated/Gesture Handler)
+- JS-driven animations cannot achieve consistent 60FPS; prefer native solutions (NativeDriver/Reanimated/Gesture Handler/Skia)
 - Animation libraries must maintain 60 FPS on both JS and UI threads (measure FPS independently on each thread)
+- Skia path interpolation calculations execute on native side (C++), avoiding JS thread blocking
+- Canvas rendering bypasses React Native's standard rendering pipeline (uses own React renderer, renders on UI thread)
 - Native modules must be thin wrappers; heavy abstractions belong on JS side
 - Validation and type checking must occur before bridge calls to avoid unnecessary round-trips
 

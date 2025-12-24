@@ -76,6 +76,21 @@
 - Are we profiling animations in release mode? (DEV mode performance is misleading)
 - Are we measuring dropped frames and stutters? (4+ dropped frames indicates UI thread issues)
 
+## Skia/Canvas Decision
+- Do we need maximum rendering control, effects beyond Rive constraints (blur, glow, shadow, path effects), or cross-platform rendering consistency?
+  - **Yes**: Use Skia Canvas
+  - **No**: Consider Rive/reanimated for simpler animations
+- Do we need pixel-level control for graphics-heavy dashboards or performant image transitions?
+  - **Yes**: Use Skia Canvas
+- Do we need blur/effects to affect underlying non-canvas views?
+  - **Yes**: Use `makeImageFromView` snapshot (plan refs early, use `collapsable={false}` on View refs)
+- Are we animating between path states (graphs, morphing)?
+  - **Yes**: Use path interpolation (ensure paths have identical command count and types)
+- Are we using transforms in Skia?
+  - **Yes**: Remember transform origin is top-left (not center like React Native)
+- Are we using image snapshots?
+  - **Yes**: Account for PixelRatio (divide dimensions by `PixelRatio.get()`)
+
 ## Native Module Design Decision
 - Are we validating all arguments on JS side before native module calls?
 - Is the native layer a thin wrapper (not heavy abstraction)?

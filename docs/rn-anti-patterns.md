@@ -51,6 +51,12 @@
 - Putting validation or complex abstractions in native code (violates separation, hurts maintainability)
 - Missing InteractionManager deferral for heavy UI work during animations (interrupts smooth animations)
 
+## Skia/Canvas Patterns
+- Using Skia for simple cases solvable with Rive/reanimated (overkill, adds unnecessary native dependency)
+- Assuming transform origin is center in Skia (it's top-left, unlike React Native; causes incorrect transform animations)
+- Interpolating paths with mismatched command structure (crashes app; paths must have identical command count and types)
+- Applying blur effects expecting underlying non-canvas views to be affected without snapshot (blur only sees canvas elements; use `makeImageFromView` snapshot)
+
 ## Testing Practices
 - Writing tests that depend on component implementation details (tests break on refactors, provide false confidence)
 - 100% test coverage obsession (wastes time on non-critical paths)
