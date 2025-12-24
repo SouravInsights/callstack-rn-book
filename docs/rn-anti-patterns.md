@@ -24,6 +24,7 @@
 - Not using System Tracing (can't identify which thread is bottleneck)
 - Profiling animations in DEV mode (DEV mode performance is misleading; disable DEV mode for animation benchmarking)
 - Measuring memory without Graphics segment (Java, Native, Graphics segments all contribute to total memory; Graphics memory reflects UI thread rendering buffers)
+- Using Chrome Remote Debugger for performance profiling (executes in V8, not JSC/Hermes, misleading metrics)
 
 ## List Patterns
 - Using `ScrollView + View.map()` for lists (renders all items, no virtualization, memory grows linearly)
@@ -37,6 +38,7 @@
 - Choosing libraries by GitHub stars alone (ignores bundle size, dependencies, feature bloat, web vs mobile compatibility)
 - Not checking bundle impact before adding dependencies (large libraries directly increase TTI)
 - Importing entire utility libraries like `lodash` (Metro doesn't tree-shake, pulls unused code)
+- Using CommonJS requires when tree shaking is required (tree shaking requires ESM syntax and `sideEffects: false` in package.json)
 - Using web libraries for networking-heavy features (e.g., real-time messaging) instead of mobile-specific SDKs
 - Using web libraries for advanced graphics rendering (3D structures, diagrams) instead of native solutions
 - Using web Firebase SDK (`firebase/database`) instead of `@react-native-firebase/database` (web SDK causes extraneous CPU/memory consumption)
@@ -56,6 +58,18 @@
 - Assuming transform origin is center in Skia (it's top-left, unlike React Native; causes incorrect transform animations)
 - Interpolating paths with mismatched command structure (crashes app; paths must have identical command count and types)
 - Applying blur effects expecting underlying non-canvas views to be affected without snapshot (blur only sees canvas elements; use `makeImageFromView` snapshot)
+
+## Bundle & Build Patterns
+- Shipping APK with all CPU architectures instead of App Bundle format (wastes bandwidth, increases download size; use `bundleRelease` instead of `assembleRelease`)
+- Leaving ProGuard disabled in release builds (unused native code shipped, larger APK, slower TTI; enable `enableProguardInReleaseBuilds = true`)
+- Keeping unused native dependencies in package.json (autolinking includes them regardless of usage, increases binary size and TTI; use `depcheck` to identify)
+- Using CommonJS requires when tree shaking is required (tree shaking requires ESM syntax and `sideEffects: false` in package.json)
+- Assuming Metro provides tree shaking by default (it doesn't; requires ESM and side-effect-free packages)
+- Shipping with Flipper in production (deprecated in RN 0.73+, removed in 0.74+)
+- Skipping dependency alignment checks when upgrading React Native (incompatible versions cause build failures or runtime crashes)
+- Assuming all bundlers support Hermes (react-native-esbuild doesn't support Hermes)
+- Using react-native-esbuild with Hermes (incompatible; esbuild doesn't support Hermes)
+- Using code splitting with Hermes expecting large gains (memory mapping already optimizes, minimal benefit)
 
 ## Testing Practices
 - Writing tests that depend on component implementation details (tests break on refactors, provide false confidence)

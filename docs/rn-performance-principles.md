@@ -10,7 +10,7 @@
 - Performance problems manifest as UI flicker and FPS drops, especially on low-end devices
 - Use `useSelector` hooks over `connect` for simpler usage patterns
 - Premature optimization can increase memory usage without measurable benefit
-- Bundle size directly impacts TTI: All imported code is loaded, parsed, and executed; Metro doesn't tree-shake
+- Bundle size directly impacts TTI: All imported code is loaded, parsed, and executed; Metro doesn't tree-shake; autolinking includes all native dependencies in package.json regardless of actual usage, increasing binary size and TTI
 - File size (including bundled assets like animations) directly impacts user retention; 18.7% of app uninstalls are due to storage issues
 - Layout measurement is the bottleneck: Measuring layout dominates list rendering cost
 - Virtualization is mandatory for large lists: FlatList/FlashList only render visible items + buffer

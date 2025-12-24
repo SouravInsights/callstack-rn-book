@@ -49,6 +49,62 @@
   - **Yes**: Web library acceptable (but still check bundle size)
 - For animation libraries: FPS > file size > memory (Graphics memory acceptable if 60 FPS target met)
 
+## Bundler Selection Decision
+- Do we need code splitting, Module Federation, or OTA updates?
+  - **Yes**: Use Re.Pack (Webpack-based)
+- Is build speed critical and Hermes not required?
+  - **Yes**: Use react-native-esbuild (faster builds, no Hermes support, no Fast Refresh)
+- Do we need Metro compatibility with tree shaking?
+  - **Yes**: Use rnx-kit (Metro + tree shaking, symlink support, TypeScript type-checking)
+- Is default setup sufficient and Fast Refresh critical?
+  - **Yes**: Use Metro (default, minimal configuration)
+- Note: react-native-esbuild incompatible with Hermes; Re.Pack has slower builds and limited Fast Refresh
+
+## Tree Shaking Decision
+- Are we using ESM syntax (import/export) instead of CommonJS?
+  - **No**: Tree shaking won't work; convert to ESM
+- Have we marked packages as side-effect-free (`sideEffects: false` in package.json)?
+  - **No**: Bundler assumes side effects, tree shaking disabled
+- Are we using a bundler that supports tree shaking? (Webpack/Re.Pack, ESBuild/rnx-kit/react-native-esbuild)
+  - **No**: Metro doesn't tree-shake by default
+- Expected reduction: 0-20% bundle size (can exceed 20% in rare cases)
+- Test both bundlers if using tree shaking (implementation differs)
+
+## Code Splitting Decision
+- Are we using Hermes?
+  - **Yes**: Code splitting provides minimal benefit (memory mapping already optimizes)
+  - **No**: Code splitting with JSC provides significant TTI improvement (load chunks on-demand)
+- Do we need OTA updates?
+  - **Yes**: Use code splitting to load remote chunks from CDN/server
+- Do we need Module Federation?
+  - **Yes**: Use code splitting to share chunks between independent apps
+
+## Native Dependency Decision
+- Have we identified unused native dependencies? (use `depcheck`)
+  - **Yes**: Remove from package.json (autolinking includes all deps regardless of usage)
+- Impact: Removing unused deps can improve TTI by ~17% and reduce binary size significantly (3.9MB+ in examples)
+- Are dev dependencies checked for native code? (may still link into production)
+- Note: Autolinking crawls package.json and node_modules with no usage analysis
+
+## Hermes Configuration Decision
+- Are we on React Native 0.70+?
+  - **Yes**: Hermes enabled by default
+  - **No**: Enable manually
+- Android: Set `enableHermes: true` in `android/app/build.gradle`
+- iOS: Set `hermes_enabled => true` in `ios/Podfile`
+- Have we rebuilt native projects after toggling flag?
+  - **No**: Rebuild required after changing Hermes flag
+- Note: Hermes uses AOT bytecode compilation (faster startup than JIT); ~2MB bundle overhead
+
+## Android Size Optimization Decision
+- Are we using App Bundle format for production? (`bundleRelease` not `assembleRelease`)
+  - **No**: App Bundle reduces APK size by ~35% (architecture-specific delivery)
+- Is ProGuard enabled for release builds? (`enableProguardInReleaseBuilds = true`)
+  - **No**: ProGuard reduces native code size (typically 700KB+ on medium apps)
+- Have we tested release builds after enabling ProGuard?
+  - **No**: ProGuard may break reflection-based code (requires custom keep rules)
+- Note: App Bundle is Google Play requirement for new apps; architecture splitting handled automatically
+
 ## Profiling Strategy Decision
 - JS bottleneck → React Profiler, react-native-performance, Flipper Hermes Debugger
 - Native bottleneck → Xcode Instruments (iOS), Android Profiler (Android)
