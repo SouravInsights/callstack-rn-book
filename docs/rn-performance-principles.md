@@ -15,7 +15,7 @@
 - Virtualization is mandatory for large lists: FlatList/FlashList only render visible items + buffer
 - MUST prioritize based on user paths and business impact
 - MUST establish control plan with acceptable ranges and monitoring frequency
-- MUST automate regression detection; manual testing doesn't scale
+- MUST automate regression detection; manual testing doesn't scale; CI must run before code merges to catch regressions early; build native apps in CI, not just run JS tests
 - Render duration and render count are primary React Native performance metrics
 - Statistical significance required to validate improvements (environment variation exists)
 - Profiling must account for measurement variation (same device, different runs differ)
@@ -24,7 +24,15 @@
 - Consider battery consumption impact in library selection (web libraries cause extraneous CPU/memory consumption; battery drain affects both foreground and background execution)
 - OS (iOS) continuously monitors resource consumption and may throttle background activities; background activity intervals can be reduced by OS if resource usage is excessive
 - Mobile SDKs deliver performance equivalent to native applications; web libraries assume browser capabilities and constraints, leading to suboptimal mobile performance
-- Bridge communication is asynchronous, non-deterministic, and capacity-limited; each bridge call requires JSON serialization/deserialization overhead
+- Bridge communication is asynchronous, non-deterministic, and capacity-limited; each bridge call requires JSON serialization/deserialization overhead; New Architecture (JSI) enables synchronous calls, eliminating bridge serialization overhead; Bridgeless mode (RN 0.73+) removes bridge entirely
+- New Architecture (JSI) enables synchronous native-JS communication; eliminates bridge serialization overhead
+- Fabric unifies render logic in C++ for cross-platform consistency; lazily initializes Host Components for faster startup
+- TurboModules enable lazy loading and synchronous native-JS communication; type safety via Codegen
+- Bridgeless mode (RN 0.73+) removes bridge overhead entirely
+- New Architecture performance is neutral in most cases; foundation for future capabilities, not immediate speed gains
+- New Architecture uses more RAM but less CPU for large view counts (10K+ views benchmark)
+- New Architecture doesn't eliminate JS thread saturation risk; JS thread saturation still blocks UI
+- React 18 concurrent features require New Architecture
 - Bridge traffic competes with gestures, animations, and UI updates; bridge has no built-in priority queue, all traffic competes equally
 - Busy bridge during gestures/animations causes dropped frames; minimize bridge traffic during active animations
 - React Native renderer diffs props and only sends minimal updates over bridge on re-render

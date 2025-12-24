@@ -48,3 +48,16 @@
 - Putting validation or complex abstractions in native code (violates separation, hurts maintainability)
 - Missing InteractionManager deferral for heavy UI work during animations (interrupts smooth animations)
 
+## Testing Practices
+- Writing tests that depend on component implementation details (tests break on refactors, provide false confidence)
+- 100% test coverage obsession (wastes time on non-critical paths)
+- No CI or unstable CI (long feedback loops, regressions reach production)
+- Manual PR testing only (doesn't scale, different environments cause inconsistencies)
+- Flaky E2E tests (lowers confidence in test suite, wastes debugging time)
+- Large snapshot tests without size limits or focused assertions (hard to maintain, catch too many irrelevant changes)
+- Missing smoke tests (ship broken apps that crash on launch)
+- Skipping CI for "small" changes (regressions reach production)
+- Building production apps without CI validation (ship broken builds)
+- Enabling New Architecture without testing for incompatible components (red boxes for unimplemented components in production)
+- Not using Interop Layer for incompatible legacy components (blocks migration unnecessarily)
+
