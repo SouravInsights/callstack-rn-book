@@ -62,3 +62,23 @@
 - Are we using System Tracing for thread-level analysis?
 - Are we checking mqt_js thread saturation?
 
+## Animation Strategy Decision
+- What properties need animation?
+  - **Transform/opacity only**: Use `Animated` with `useNativeDriver: true`
+  - **Layout properties (height, color, etc.)**: Use Reanimated
+- Is this gesture-driven?
+  - **Yes**: Use Gesture Handler + Reanimated
+  - **No**: NativeDriver (transform/opacity) or Reanimated (layout properties) sufficient
+- Are we deferring heavy UI work during animations using `InteractionManager`?
+
+## Native Module Design Decision
+- Are we validating all arguments on JS side before native module calls?
+- Is the native layer a thin wrapper (not heavy abstraction)?
+- Is error handling catching issues on JS side before bridge call?
+- Are we profiling bridge traffic when seeing UI jank?
+
+## Bridge Traffic Decision
+- Are we minimizing bridge traffic during active animations?
+- Are we deferring heavy work until animations complete?
+- When seeing UI jank, have we profiled bridge traffic?
+

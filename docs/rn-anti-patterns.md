@@ -40,3 +40,11 @@
 - Assuming web library API compatibility implies performance parity on mobile
 - Ignoring OS resource monitoring and throttling behavior (iOS throttles background activities based on resource consumption)
 
+## Bridge & Animation Patterns
+- Proxying calls directly to native without JS-side validation (causes unnecessary round-trips)
+- Using JS-driven animations for gesture interactions (bridge saturation causes jank)
+- Blocking bridge with unnecessary traffic during animations (causes dropped frames)
+- Assuming bridge calls are fast or predictable (bridge is asynchronous and capacity-limited)
+- Putting validation or complex abstractions in native code (violates separation, hurts maintainability)
+- Missing InteractionManager deferral for heavy UI work during animations (interrupts smooth animations)
+

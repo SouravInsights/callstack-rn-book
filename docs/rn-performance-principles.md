@@ -24,4 +24,14 @@
 - Consider battery consumption impact in library selection (web libraries cause extraneous CPU/memory consumption; battery drain affects both foreground and background execution)
 - OS (iOS) continuously monitors resource consumption and may throttle background activities; background activity intervals can be reduced by OS if resource usage is excessive
 - Mobile SDKs deliver performance equivalent to native applications; web libraries assume browser capabilities and constraints, leading to suboptimal mobile performance
+- Bridge communication is asynchronous, non-deterministic, and capacity-limited; each bridge call requires JSON serialization/deserialization overhead
+- Bridge traffic competes with gestures, animations, and UI updates; bridge has no built-in priority queue, all traffic competes equally
+- Busy bridge during gestures/animations causes dropped frames; minimize bridge traffic during active animations
+- React Native renderer diffs props and only sends minimal updates over bridge on re-render
+- NativeDriver serializes animation once upfront; no bridge traffic during execution (limited to transform/opacity)
+- Reanimated worklets run JavaScript synchronously on UI thread (supports layout properties)
+- Gesture Handler processes gestures natively, avoiding JS thread entirely
+- JS-driven animations cannot achieve consistent 60FPS; prefer native solutions (NativeDriver/Reanimated/Gesture Handler)
+- Native modules must be thin wrappers; heavy abstractions belong on JS side
+- Validation and type checking must occur before bridge calls to avoid unnecessary round-trips
 
